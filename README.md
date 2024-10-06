@@ -26,43 +26,79 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Step by step
-1.Install Required Packages
-  a)npm install @nestjs/swagger swagger-ui-express
-  b)npm install @nestjs/typeorm typeorm pg
-  c)npm install @nestjs/jwt @nestjs/passport passport passport-jwt
- 
-2.Create Product Module, Controller, and Service
-3.Define DTOs (Data Transfer Objects)
-4.Configure Swagger to generate API documentation in main.ts
-5.To make the DTOs visible in Swagger, add decorators provided by @nestjs/swagger.
-6.Connect to PostgreSQL with TypeORM
-  a)Configure TypeORM to connect to the PostgreSQL database named MOTOR_INSURANCE_WEBSITE
-  b)Makesure use the correct PostgreSQL username and password
-  c)Update the app.module.ts to include the TypeORM configuration
-  d)Create the Product Entity that maps to the PRODUCT table in the database
-  e)Register Product Entity in Product Module
-7.For user role checking
-  a)Configure JWT Strategy
-  b)Setup Authentication and Roles Middleware
-    i.We will create two pieces of middleware:
-      1.JWT Authentication Middleware: Ensures that a valid JWT is provided. (Please provide the correct secret key: for this task we only set it as ‘secretKey’)
-      2.Role Checking Middleware: Verifies if the authenticated user has the necessary role.
-  c)Apply Middleware to Routes
-  d)We will apply the AuthMiddleware globally (so all routes require authentication) and apply the RoleCheckMiddleware only to certain routes (like POST, PUT, and DELETE for admin access).
-  e)Configure Middleware in app.module.ts
-  f)To generate the JWT tokens, we should create a simple login controller that verifies user credentials and returns a token. For this test, we only generate token from https://jwt.io/ . Use this format to generate JWT token. For admin { "Username": "John   Wick","role": “admin”}. For user  { "Username": "John Doe","role": “user”}. Again, please remember to provide the same secret key (‘secretKey’) or else you will not authenticate.
-8.Test the API
-  a)Once you've completed all these steps,run the program. Visit http://localhost:3000/api to access the Swagger documentation and test the endpoints directly from the UI.
-  b)By using the /auth/login endpoint, we can obtain a JWT token, and use it to authenticate the API calls.
-  c)Swagger UI will show a "Authorize" button. You can enter the JWT token there to authorize all subsequent requests.
+# Product API Documentation
+
+## Step by Step Guide
+
+### 1. Install Required Packages
+
+Run the following commands to install necessary dependencies:
+
+- Swagger:
+  ```bash
+  $ npm install
+
   
 ## Project setup
 
 ```bash
 $ npm install
 ```
+## Create Product Module, Controller, and Service
+- Create a module, controller, and service for handling Product API operations such as GET, POST, PUT, DELETE.
 
+## Define DTOs (Data Transfer Objects)
+- Create DTOs to validate the input data for each of the endpoints. These DTOs will ensure the structure of incoming requests.
+
+## Configure Swagger to Generate API Documentation
+- In main.ts, configure Swagger to automatically generate API documentation for your endpoints:
+```bash
+const config = new DocumentBuilder()
+  .setTitle('Product API')
+  .setDescription('The product API description')
+  .setVersion('1.0')
+  .addBearerAuth()
+  .build();
+const document = SwaggerModule.createDocument(app, config);
+SwaggerModule.setup('api', app, document);
+```
+## Add Swagger Decorators to DTOs
+- In app.module.ts, configure TypeORM as follows:
+```bash
+TypeOrmModule.forRoot({
+  type: 'postgres',
+  host: 'localhost',
+  port: 5432,
+  username: 'yourUsername',
+  password: 'yourPassword',
+  database: 'MOTOR_INSURANCE_WEBSITE',
+  entities: [Product],
+  synchronize: true,
+}),
+```
+- Ensure you use the correct PostgreSQL username and password.
+- Update app.module.ts to include the TypeORM configuration.
+- Create the Product Entity to map to the PRODUCT table in PostgreSQL.
+- Register the Product entity in the ProductModule
+
+## Implement User Role Checking
+- Configure JWT Strategy : Implement JWT authentication and role-based access control. Ensure that the correct secret key is used ('secretKey' in this case).
+- We will create two middlewares:
+- JWT Authentication Middleware: Ensures a valid JWT token is provided.
+- Role Checking Middleware: Verifies if the authenticated user has the appropriate role (e.g., admin).
+- Apply authentication middleware globally to ensure that all routes require authentication. Apply the role-checking middleware to specific routes (e.g., POST, PUT, DELETE for admin access).
+
+## Generate JWT Tokens
+- Create a simple login controller or generate tokens manually using jwt.io. Use the following JWT payload for testing:
+- Admin
+  ```bash
+{ "Username": "John Wick", "role": "admin" }
+ ```
+-User
+```bash
+{ "Username": "John Doe", "role": "admin" }
+ ```
+- Ensure the token is signed with the secret key 'secretKey'.
 
 ## Compile and run the project
 
@@ -76,6 +112,9 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+- Visit http://localhost:3000/api to view the Swagger documentation and test the endpoints.
+- Use /auth/login to obtain a JWT token for making authenticated API calls.
+- Click the "Authorize" button in Swagger UI and enter your JWT token to authorize subsequent API requests.
 
 ## Run tests
 
