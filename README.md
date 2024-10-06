@@ -31,6 +31,10 @@
 ```bash
 $ npm install
 ```
+## Update Postgres Password and JWT secret password
+- go to app.module.ts
+- change postgress password
+- change JWT secret password
 
 ## Compile and run the project
 
