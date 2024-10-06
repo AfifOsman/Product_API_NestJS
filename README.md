@@ -90,14 +90,8 @@ TypeOrmModule.forRoot({
 
 ## Generate JWT Tokens
 - Create a simple login controller or generate tokens manually using jwt.io. Use the following JWT payload for testing:
-- Admin
-  ```bash
-{ "Username": "John Wick", "role": "admin" }
- ```
--User
-```bash
-{ "Username": "John Doe", "role": "admin" }
- ```
+- Admin : { "Username": "John Wick", "role": "admin" }
+- User : { "Username": "John Doe", "role": "admin" }
 - Ensure the token is signed with the secret key 'secretKey'.
 
 ## Compile and run the project
